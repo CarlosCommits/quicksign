@@ -1,0 +1,30 @@
+#pdf-image-overlay {
+  position: fixed !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background: transparent;
+}
+
+#pdf-image-overlay img {
+  display: block !important;
+  max-width: none !important;
+  pointer-events: auto !important;
+}
+
+#pdf-image-overlay .resize-handle {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 10px !important;
+  height: 10px !important;
+  background-color: #007bff !important;
+  cursor: se-resize !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure overlay is visible on top of PDF viewer */
+embed[type="application/pdf"] {
+  z-index: 1;
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Viewer with Image Overlay</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #525659;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+        #toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .center-buttons {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+        }
+        #viewerContainer {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+        }
+        #pdfContainer {
+            position: relative;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            margin: auto;
+            overflow: hidden;
+        }
+        #pdfCanvas {
+            display: block;
+        }
+        .overlay-container {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+            -webkit-user-select: none;
+            border: 2px solid transparent;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .overlay-container.active {
+            border-color: rgba(0, 123, 255, 0.3);
+        }
+        .overlay-container.dragging {
+            border-color: rgba(0, 123, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        .overlay-container.resizing {
+            border-color: rgba(0, 123, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        #overlayImage {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: block;
+        }
+        .resize-handle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            bottom: -10px;
+            right: -10px;
+            border-radius: 50%;
+            cursor: se-resize;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+            z-index: 1000;
+        }
+        .resize-handle:hover {
+            transform: scale(1.2);
+        }
+        button {
+            padding: 8px 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background: #5a6268;
+        }
+        #imageInput {
+            display: none;
+        }
+        .custom-file-upload {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .custom-file-upload:hover {
+            background: #0056b3;
+        }
+        #pageInfo {
+            margin-left: auto;
+            color: #666;
+            font-size: 14px;
+        }
+        #saveBtn {
+            background: #28a745;
+        }
+        #saveBtn:hover {
+            background: #218838;
+        }
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+        }
+        .signature-guide {
+            position: absolute;
+            height: 2.5px;
+            background-color: #007bff;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 999;
+            cursor: help;
+        }
+        .signature-guide-text {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #007bff;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        .signature-guide:hover::before {
+            content: attr(title);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button id="prevPage">Previous</button>
+        <button id="nextPage">Next</button>
+        <div class="center-buttons">
+            <label class="custom-file-upload">
+                <input type="file" id="imageInput" accept="image/png" />
+                Choose Signature
+            </label>
+            <button id="saveBtn">Apply Signature</button>
+        </div>
+        <div id="pageInfo">Page: <span id="pageNum"></span> / <span id="pageCount"></span></div>
+    </div>
+    
+    <div id="viewerContainer">
+        <div id="pdfContainer">
+            <canvas id="pdfCanvas"></canvas>
+            <div class="signature-guide" title="may not be accurate">
+                <div class="signature-guide-text">Signature Guide Line</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay">
+        Processing PDF... Please wait.
+    </div>
+
+    <script src="pdf-lib.min.js"></script>
+    <script src="pdf.min.js"></script>
+    <script src="viewer.js"></script>
+</body>
+</html>
