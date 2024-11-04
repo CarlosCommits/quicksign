@@ -30,6 +30,4 @@ QuickSign is a Chrome extension that provides seamless PDF signing capabilities 
 The extension is built using vanilla JavaScript and utilizes several key libraries:
 - PDF.js for PDF rendering and viewing
 - PDF-lib.js for PDF manipulation
-- jsPDF for PDF generation
-
-
+- PDF-worker.js for PDF processing
