@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "QuickSign",
   "version": "1.0",
-  "description": "Add PNG images on top of PDF documents in Chrome",
+  "description": "Add PNG signature images to QuickBooks Online PDF checks in Chrome",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
