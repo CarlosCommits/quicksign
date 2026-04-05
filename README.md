@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon128.png" alt="QuickSign Logo" width="128" height="128">
+  <img src="icon128-rounded.png" alt="QuickSign Logo" width="128" height="128">
 </p>
 
 # QuickSign Chrome Extension
